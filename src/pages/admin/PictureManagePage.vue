@@ -2,7 +2,10 @@
   <div id="userManagePage">
     <a-flex justify="space-between">
       <h2>图片管理</h2>
-      <a-button type="primary" href="/add_picture" target="_blank">+ 创建图片</a-button>
+      <a-space>
+        <a-button type="primary" href="/add_picture" target="_blank">+ 创建图片</a-button>
+        <a-button type="primary" href="/add_picture/batch" target="_blank" ghost>+ 批量创建图片</a-button>
+      </a-space>
     </a-flex>
     <a-form layout="inline" :model="searchParams" @finish="doSearch">
       <a-form-item label="关键词" name="searchText">
@@ -191,6 +194,7 @@ const pagination = computed(() => {
 const fetchData = async () => {
   const res = await listPictureByPageUsingPost({
     ...searchParams,
+    nullSpaceId: true,
   })
   if (res.data.data) {
     dataList.value = res.data.data.records ?? []
@@ -274,5 +278,4 @@ onMounted(() => {
   margin-top: 8px;
   color: #666;
 }
-
 </style>

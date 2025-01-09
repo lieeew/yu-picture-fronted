@@ -9,3 +9,11 @@ export async function healthUsingGet(options?: { [key: string]: any }) {
     ...(options || {}),
   })
 }
+
+/** test GET /api/test2 */
+export async function testUsingGet(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/test2', {
+    method: 'GET',
+    ...(options || {}),
+  })
+}

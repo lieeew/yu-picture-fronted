@@ -60,21 +60,25 @@ const items = ref<MenuProps['items']>([
     title: '主页',
   },
   {
-    key: '/admin/userManage',
-    label: '管理页面',
-    title: '管理页面',
-  },
-  {
     key: '/add_picture',
     label: '创建图片',
     title: '创建图片',
+  },
+  {
+    key: '/admin/userManage',
+    label: '管理页面',
+    title: '管理页面',
   },
   {
     key: '/admin/pictureManage',
     label: '图片管理',
     title: '图片管理',
   },
-
+  {
+    key: '/admin/spaceManage',
+    label: '空间管理',
+    title: '空间管理',
+  },
   // {
   //   key: 'others',
   //   label: h('a', { href: 'https://www.codefather.cn', target: '_blank' }, '编程导航'),
