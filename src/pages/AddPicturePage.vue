@@ -95,7 +95,7 @@ import {
 import { useRoute, useRouter } from 'vue-router'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import ImageCropper from '@/components/ImageCropper.vue'
-import ImageOutPainting from "@/components/ImageOutPainting.vue";
+import ImageOutPainting from '@/components/ImageOutPainting.vue'
 
 // AI 扩图弹窗引用
 const imageOutPaintingRef = ref()
@@ -111,7 +111,6 @@ const doImagePainting = () => {
 const onImageOutPaintingSuccess = (newPicture: API.PictureVO) => {
   picture.value = newPicture
 }
-
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -238,5 +237,4 @@ onMounted(() => {
   text-align: center;
   margin: 16px 0;
 }
-
 </style>
