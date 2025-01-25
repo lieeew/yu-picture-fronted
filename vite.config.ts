@@ -19,6 +19,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": "http://localhost:8123",
+      "/ws": "ws://localhost:8123",
     }
   }
 })

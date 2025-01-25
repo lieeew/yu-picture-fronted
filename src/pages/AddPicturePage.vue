@@ -25,11 +25,13 @@
           AI 扩图
         </a-button>
       </a-space>
+
       <ImageCropper
         ref="imageCropperRef"
         :imageUrl="picture?.url"
         :picture="picture"
         :spaceId="spaceId"
+        :space="space"
         :onSuccess="onCropSuccess"
       />
       <ImageOutPainting
@@ -84,9 +86,8 @@
 
 <script setup lang="ts">
 import PictureUpload from '@/components/PictureUpload.vue'
-import { computed, h, onMounted, reactive, ref } from 'vue'
+import {computed, h, onMounted, reactive, ref, watchEffect} from 'vue'
 import { message } from 'ant-design-vue'
-import { EditOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
 import {
   editPictureUsingPost,
   getPictureVoByIdUsingGet,
@@ -95,40 +96,20 @@ import {
 import { useRoute, useRouter } from 'vue-router'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import ImageCropper from '@/components/ImageCropper.vue'
+import { EditOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
 import ImageOutPainting from '@/components/ImageOutPainting.vue'
+import {getSpaceVoByIdUsingGet} from "@/api/spaceController.ts";
 
-// AI 扩图弹窗引用
-const imageOutPaintingRef = ref()
-
-// AI 扩图
-const doImagePainting = () => {
-  if (imageOutPaintingRef.value) {
-    imageOutPaintingRef.value.openModal()
-  }
-}
-
-// 编辑成功事件
-const onImageOutPaintingSuccess = (newPicture: API.PictureVO) => {
-  picture.value = newPicture
-}
+const router = useRouter()
+const route = useRoute()
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
 const uploadType = ref<'file' | 'url'>('file')
-// 图片编辑弹窗引用
-const imageCropperRef = ref()
-
-// 编辑图片
-const doEditPicture = () => {
-  if (imageCropperRef.value) {
-    imageCropperRef.value.openModal()
-  }
-}
-
-// 编辑成功事件
-const onCropSuccess = (newPicture: API.PictureVO) => {
-  picture.value = newPicture
-}
+// 空间 id
+const spaceId = computed(() => {
+  return route.query?.spaceId
+})
 
 /**
  * 图片上传成功
@@ -138,13 +119,6 @@ const onSuccess = (newPicture: API.PictureVO) => {
   picture.value = newPicture
   pictureForm.name = newPicture.name
 }
-
-const router = useRouter()
-
-// 空间 id
-const spaceId = computed(() => {
-  return route.query?.spaceId
-})
 
 /**
  * 提交表单
@@ -200,7 +174,9 @@ const getTagCategoryOptions = async () => {
   }
 }
 
-const route = useRoute()
+onMounted(() => {
+  getTagCategoryOptions()
+})
 
 // 获取老数据
 const getOldPicture = async () => {
@@ -223,8 +199,54 @@ const getOldPicture = async () => {
 
 onMounted(() => {
   getOldPicture()
-  getTagCategoryOptions()
 })
+
+// ----- 图片编辑器引用 ------
+const imageCropperRef = ref()
+
+// 编辑图片
+const doEditPicture = async () => {
+  imageCropperRef.value?.openModal()
+}
+
+// 编辑成功事件
+const onCropSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
+
+// ----- AI 扩图引用 -----
+const imageOutPaintingRef = ref()
+
+// 打开 AI 扩图弹窗
+const doImagePainting = async () => {
+  imageOutPaintingRef.value?.openModal()
+}
+
+// AI 扩图保存事件
+const onImageOutPaintingSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
+
+// 获取空间信息
+const space = ref<API.SpaceVO>()
+
+// 获取空间信息
+const fetchSpace = async () => {
+  // 获取数据
+  if (spaceId.value) {
+    const res = await getSpaceVoByIdUsingGet({
+      id: spaceId.value,
+    })
+    if (res.data.code === 0 && res.data.data) {
+      space.value = res.data.data
+    }
+  }
+}
+
+watchEffect(() => {
+  fetchSpace()
+})
+
 </script>
 
 <style scoped>
