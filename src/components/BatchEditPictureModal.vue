@@ -41,7 +41,7 @@ import { message } from 'ant-design-vue'
 // 定义组件属性类型
 interface Props {
   pictureList: API.PictureVO[]
-  spaceId: number
+  spaceId: string
   onSuccess: () => void
 }
 

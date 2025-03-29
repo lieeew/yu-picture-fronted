@@ -47,8 +47,8 @@ import {
   updateSpaceUsingPost,
 } from '@/api/spaceController.ts'
 import { useRoute, useRouter } from 'vue-router'
-import {SPACE_LEVEL_MAP, SPACE_LEVEL_OPTIONS, SPACE_TYPE_ENUM, SPACE_TYPE_MAP} from '@/constants/space.ts'
-import { formatSize } from '../utils'
+import { SPACE_LEVEL_OPTIONS, SPACE_TYPE_ENUM, SPACE_TYPE_MAP } from '@/constants/space.ts'
+import { formatSize } from '@/utils'
 
 const space = ref<API.SpaceVO>()
 const spaceForm = reactive<API.SpaceAddRequest | API.SpaceEditRequest>({})
@@ -119,7 +119,7 @@ const handleSubmit = async (values: any) => {
 // 获取老数据
 const getOldSpace = async () => {
   // 获取到 id
-  const id = route.query?.id
+  const id = String(route.query?.id ?? '')
   if (id) {
     const res = await getSpaceVoByIdUsingGet({
       id,

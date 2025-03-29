@@ -34,12 +34,12 @@
         </a-button>
         <a-button v-if="canEditPicture" :icon="h(EditOutlined)" @click="doBatchEdit"> 批量编辑</a-button>
         <a-tooltip
-          :title="`占用空间 ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`"
+          :title="`占用空间 ${formatSize(Number(space.totalSize))} / ${formatSize(Number(space.maxSize))}`"
         >
           <a-progress
             type="circle"
             :size="42"
-            :percent="((space.totalSize * 100) / space.maxSize).toFixed(1)"
+            :percent="((Number(space.totalSize) * 100) / Number(space.maxSize)).toFixed(1)"
           />
         </a-tooltip>
       </a-space>
@@ -71,7 +71,7 @@
     />
     <BatchEditPictureModal
       ref="batchEditPictureModalRef"
-      :spaceId="id"
+      :spaceId=id
       :pictureList="dataList"
       :onSuccess="onBatchEditPictureSuccess"
     />
@@ -96,7 +96,7 @@ import { BarChartOutlined, EditOutlined, TeamOutlined } from '@ant-design/icons-
 import { SPACE_PERMISSION_ENUM, SPACE_TYPE_MAP } from '../constants/space.ts'
 
 interface Props {
-  id: string | number
+  id: string
 }
 
 const props = defineProps<Props>()
@@ -126,8 +126,10 @@ const fetchSpaceDetail = async () => {
     } else {
       message.error('获取空间详情失败，' + res.data.message)
     }
-  } catch (e: any) {
-    message.error('获取空间详情失败：' + e.message)
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      message.error('获取空间详情失败：' + e.message)
+    }
   }
 }
 
@@ -155,13 +157,13 @@ const fetchData = async () => {
   loading.value = true
   // 转换搜索参数
   const params = {
-    spaceId: props.id,
+    spaceId: String(props.id ?? ''),
     ...searchParams.value,
   }
   const res = await listPictureVoByPageUsingPost(params)
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data.records ?? []
-    total.value = res.data.data.total ?? 0
+    total.value = Number(res.data.data.records ?? 0)
   } else {
     message.error('获取数据失败，' + res.data.message)
   }
@@ -198,7 +200,7 @@ const onColorChange = async (color: string) => {
   loading.value = true
   const res = await searchPictureByColorUsingPost({
     picColor: color,
-    spaceId: props.id,
+    spaceId: String(props.id ?? ''),
   })
   if (res.data.code === 0 && res.data.data) {
     const data = res.data.data ?? []
@@ -228,7 +230,7 @@ const doBatchEdit = () => {
 // 空间 id 改变时，必须重新获取数据
 watch(
   () => props.id,
-  (newSpaceId) => {
+  () => {
     fetchSpaceDetail()
     fetchData()
   },

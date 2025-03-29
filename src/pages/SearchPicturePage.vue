@@ -42,7 +42,7 @@ const route = useRoute()
 
 // 图片 id
 const pictureId = computed(() => {
-  return route.query?.pictureId
+  return String(route.query?.id ?? '')
 })
 
 const picture = ref<API.PictureVO>({})
@@ -50,7 +50,7 @@ const picture = ref<API.PictureVO>({})
 // 获取老数据
 const getOldPicture = async () => {
   // 获取数据
-  const id = route.query?.pictureId
+  const id = String(route.query?.pictureId ?? '')
   if (id) {
     const res = await getPictureVoByIdUsingGet({
       id: id,

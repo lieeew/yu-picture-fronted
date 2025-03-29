@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import PictureUpload from '@/components/PictureUpload.vue'
-import {computed, h, onMounted, reactive, ref, watchEffect} from 'vue'
+import { computed, h, onMounted, reactive, ref, watchEffect } from 'vue'
 import { message } from 'ant-design-vue'
 import {
   editPictureUsingPost,
@@ -98,7 +98,7 @@ import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import ImageCropper from '@/components/ImageCropper.vue'
 import { EditOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
 import ImageOutPainting from '@/components/ImageOutPainting.vue'
-import {getSpaceVoByIdUsingGet} from "@/api/spaceController.ts";
+import { getSpaceVoByIdUsingGet } from '@/api/spaceController.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -108,7 +108,7 @@ const pictureForm = reactive<API.PictureEditRequest>({})
 const uploadType = ref<'file' | 'url'>('file')
 // 空间 id
 const spaceId = computed(() => {
-  return route.query?.spaceId
+  return String(route.query?.spaceId ?? '')
 })
 
 /**
@@ -126,7 +126,7 @@ const onSuccess = (newPicture: API.PictureVO) => {
  */
 const handleSubmit = async (values: any) => {
   console.log(values)
-  const pictureId = picture.value.id
+  const pictureId = picture.value?.id
   if (!pictureId) {
     return
   }
@@ -184,7 +184,7 @@ const getOldPicture = async () => {
   const id = route.query?.id
   if (id) {
     const res = await getPictureVoByIdUsingGet({
-      id,
+      id: id,
     })
     if (res.data.code === 0 && res.data.data) {
       const data = res.data.data
@@ -246,7 +246,6 @@ const fetchSpace = async () => {
 watchEffect(() => {
   fetchSpace()
 })
-
 </script>
 
 <style scoped>

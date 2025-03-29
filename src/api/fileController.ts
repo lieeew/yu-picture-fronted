@@ -1,4 +1,3 @@
-// @ts-ignore
 /* eslint-disable */
 import request from '@/request'
 
@@ -33,6 +32,7 @@ export async function testUploadFileUsingPost(
   return request<API.BaseResponseString_>('/api/file/test/upload', {
     method: 'POST',
     data: formData,
+    // @ts-ignore
     requestType: 'form',
     ...(options || {}),
   })

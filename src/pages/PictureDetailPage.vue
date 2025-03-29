@@ -101,7 +101,7 @@ import ShareModal from '@/components/ShareModal.vue'
 import { SPACE_PERMISSION_ENUM } from '@/constants/space.ts'
 
 interface Props {
-  id: string | number
+  id: string
 }
 
 const props = defineProps<Props>()

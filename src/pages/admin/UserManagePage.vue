@@ -88,7 +88,7 @@ const columns = [
   },
 ]
 
-const doDelete = async (id: number) => {
+const doDelete = async (id: string) => {
   const res = await deleteUserUsingPost({ id })
   console.log('res', res)
   if (res.data.code === 0) {

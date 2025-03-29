@@ -54,7 +54,7 @@ import { SPACE_TYPE_ENUM } from '@/constants/space.ts'
 interface Props {
   imageUrl?: string
   picture?: API.PictureVO
-  spaceId?: number
+  spaceId?: string
   space?: API.SpaceVO
   onSuccess?: (newPicture: API.PictureVO) => void
 }
