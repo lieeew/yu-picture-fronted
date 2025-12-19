@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watchEffect } from 'vue'
 import { uploadPictureUsingPost } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
@@ -132,9 +132,23 @@ const handleUpload = async ({ file }: any) => {
 // 是否可见
 const visible = ref(false)
 
+// 重置裁剪器状态
+const resetCropper = () => {
+  nextTick(() => {
+    if (cropperRef.value) {
+      // 重置缩放比例
+      cropperRef.value.refresh()
+      // 重置裁剪框位置和大小
+      cropperRef.value.goAuto()
+    }
+  })
+}
+
 // 打开弹窗
 const openModal = () => {
   visible.value = true
+  // 在弹窗打开后重置裁剪器状态
+  resetCropper()
 }
 
 // 关闭弹窗
@@ -145,6 +159,12 @@ const closeModal = () => {
     closeSocket(websocket)
   }
   editingUser.value = undefined
+  // 重置裁剪器状态
+  nextTick(() => {
+    if (cropperRef.value) {
+      cropperRef.value.refresh()
+    }
+  })
 }
 
 // 暴露函数给父组件
