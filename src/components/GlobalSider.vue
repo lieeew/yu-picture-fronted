@@ -55,9 +55,11 @@ const menuItems = computed(() => {
   // 展示团队空间分组
   const teamSpaceSubMenus = teamSpaceList.value.map((spaceUser) => {
     const space = spaceUser.space
-    return {
-      key: '/space/' + spaceUser.spaceId,
-      label: space?.spaceName,
+    if (space?.spaceLevel && space.spaceLevel === 2) {
+      return {
+        key: '/space/' + spaceUser.spaceId,
+        label: space?.spaceName,
+      }
     }
   })
   const teamSpaceMenuGroup = {

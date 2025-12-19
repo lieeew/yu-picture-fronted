@@ -16,12 +16,20 @@ export const formatSize = (size?: number) => {
  * @param url 图片下载地址
  * @param fileName 要保存为的文件名
  */
-export function downloadImage(url?: string, fileName?: string) {
+export async function downloadImage(url?: string, fileName?: string) {
   if (!url) {
     return
   }
-  saveAs(url, fileName)
+  
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    saveAs(blob, fileName);
+  } catch (error) {
+    console.error('下载图片失败:', error);
+  }
 }
+
 /**
  * 将颜色值转换为标准 #RRGGBB 格式
  * @param input

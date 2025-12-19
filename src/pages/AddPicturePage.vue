@@ -132,7 +132,7 @@ const handleSubmit = async (values: any) => {
   }
   const res = await editPictureUsingPost({
     id: pictureId,
-    spaceId: spaceId.value,
+    spaceId: spaceId.value === '' ? null : spaceId.value,
     ...values,
   })
   // 操作成功
